@@ -1,0 +1,20 @@
+{
+  "name": "react-employee-management",
+  "version": "0.0.1",
+  "description": "Employee management system to track employees, departments, salaries etc.",
+  "main": "index.js",
+  "scripts": {
+    "dev": "node server.js",
+    "build": "next build",
+    "start": "next start",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Kirill Volodkin",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "next": "^9.3.6",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1"
+  }
+}
