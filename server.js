@@ -5,6 +5,7 @@ const session = require('express-session');
 const passport = require('passport');
 const bodyParser = require("body-parser");
 const path = require("path");
+const isAuthenticated = require('./controller/isAuthenticated');
 
 const dev = process.env.NODE_ENV !== 'production'; //will return true if non-prod, false if prod
 const app = next({dev});
@@ -34,9 +35,13 @@ app.prepare()
 
     server.use('/api', apiRoutes);
 
+    server.get('/secured/*', isAuthenticated, (req, res) => {
+        return handle(req, res);
+    });
+
     server.get('*', (req, res) => {
         return handle(req, res);
-    })
+    });
     server.listen(PORT, (err) => {
         if (err) throw err;
         console.log('Application is ready on port: ', PORT);
