@@ -2,7 +2,14 @@ import axios from 'axios';
 
 const Login = () => {
     let login = (user, password) => {
-        axios.get();
+        axios({
+            method: 'post',
+            url: '/api/login',
+            data: {
+              userId: user,
+              password: password
+            }
+          });
     }
     return (
     <div>
