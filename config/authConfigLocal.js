@@ -10,7 +10,7 @@ passport.use(new LocalStrategy(
       user.getAllDetailsByUserId(username)
       .then(async function(userInfo){
         let result;
-        if (userInfo.length < 1) {
+        if (userInfo[0].length < 1) {
           result = false;
         } else {
           //console.log('userInfo', userInfo);
@@ -20,7 +20,7 @@ passport.use(new LocalStrategy(
         }
         if (!result) {
           //console.log('got into !result');
-            done(null, false, {message: 'Incorrect email or password'});
+            done(null, false, {message: 'Incorrect UserID or Password'});
           } else {
             //console.log('userInfo[0] passed to done: ', userInfo[0]);
             done(null, userInfo[0][0]);

@@ -1,6 +1,7 @@
 const express = require('express');
 const passport = require('../config/authConfigLocal');
 const bcrypt = require("bcryptjs");
+const authenticate = require('./authenticate');
 const User = require('../model/user');
 
 const saltRounds = 10;
@@ -48,7 +49,11 @@ apiRoutes.post('/user/updatePwd', async (req, res) => {
     }
 });
 
-apiRoutes.post('/login', passport.authenticate("local", {failureMessage: 'Incorrect user name or password'}), (req, res) => {
+// apiRoutes.post('/login', passport.authenticate("local", {failureMessage: 'Incorrect user name or password'}), (req, res) => {
+//     res.status(200).send('Success');
+// });
+
+apiRoutes.post('/login', authenticate, (req, res) => {
     res.status(200).send('Success');
 });
 
