@@ -52,7 +52,7 @@ const Login = () => {
             </Head>
             <form className={classes.loginForm} noValidate autoComplete="off">
                 <TextField id="userId" label="User ID" variant="outlined"/>
-                <TextField id="password" label="Password" variant="outlined"/>
+                <TextField id="password" label="Password" variant="outlined" type="password" autoComplete="current-password"/>
                 <Button variant="contained" color="primary" onClick={login}>Login</Button>
             </form>
         </div>
