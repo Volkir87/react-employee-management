@@ -7,12 +7,13 @@ module.exports = (req, res, next) => {
     passport.authenticate("local", (err, user, info) => {
         console.log('starting authentication');
         console.log('user is: ', user);
-        if (err) {next(err)}
+        if (err) {return next(err)}
         if (!user) {
             req.session.message = info.message;
-            res.status(401).json({message: info.message})
-        } else {
-            next()
+            return res.status(401).json({message: info.message})
         }
+        req.login(user, (err) => {
+            if (err) { return next(err); }
+            return next()});
     })(req, res, next);
     }
