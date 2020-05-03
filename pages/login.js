@@ -3,22 +3,43 @@ import Head from 'next/head'
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import ApplicationBar from '../components/ApplicationBar';
+import Typography from '@material-ui/core/Typography';
 
 const useStyles = makeStyles((theme) => ({
     root: {
         '& > *': {
             margin: theme.spacing(1),
-            width: '25ch',
+            width: '25rem',
         },
     },
     loginForm: {
             margin: theme.spacing(1),
-            width: '25ch',
+            width: '25rem',
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'space-between',
-            alignItems: 'stretch'
+            alignItems: 'stretch',
+            padding: '1rem',
+            borderStyle: 'solid',
+            borderColor: '#C4C4C4',
+            borderWidth: '1px',
+            borderRadius: '5px',
+            textAlign: 'center'
         },
+    loginArea: {
+        margin: '3rem',
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'center'
+    },
+    loginItem: {
+        margin: '0.5rem',
+    },
+    buttonArea: {
+        display: 'flex',
+        justifyContent: 'end'
+    },
 }));
 
 const Login = () => {
@@ -47,14 +68,18 @@ const Login = () => {
         <div>
             <Head>
                 <title>Login</title>
-                <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
-                <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
             </Head>
-            <form className={classes.loginForm} noValidate autoComplete="off">
-                <TextField id="userId" label="User ID" variant="outlined"/>
-                <TextField id="password" label="Password" variant="outlined" type="password" autoComplete="current-password"/>
-                <Button variant="contained" color="primary" onClick={login}>Login</Button>
-            </form>
+            <ApplicationBar></ApplicationBar>
+            <div className={classes.loginArea}>
+                <form className={classes.loginForm} noValidate autoComplete="off">
+                    <Typography variant='h6'>Login</Typography>
+                    <TextField id="userId" className={classes.loginItem} label="User ID" variant="outlined"/>
+                    <TextField id="password" className={classes.loginItem} label="Password" variant="outlined" type="password" autoComplete="current-password"/>
+                    <div className={classes.buttonArea}>
+                        <Button variant="contained" className={classes.loginItem} color="primary" onClick={login}>Login</Button>
+                    </div>
+                </form>
+            </div>
         </div>
   )}
 
