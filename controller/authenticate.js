@@ -5,8 +5,6 @@ const passport = require('../config/authConfigLocal');
 module.exports = (req, res, next) => {
     console.log('called authenticate');
     passport.authenticate("local", (err, user, info) => {
-        console.log('starting authentication');
-        console.log('user is: ', user);
         if (err) {return next(err)}
         if (!user) {
             req.session.message = info.message;
