@@ -5,6 +5,9 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import ApplicationBar from '../components/ApplicationBar';
 import Typography from '@material-ui/core/Typography';
+import Snackbar from '@material-ui/core/Snackbar';
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -40,10 +43,22 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         justifyContent: 'end'
     },
+    snackbarError: {
+        color: 'red'
+    },
 }));
 
 const Login = () => {
     const classes = useStyles(); // makes sure we are using the styles as defined above
+
+    const [message, setMessage] = React.useState({open: false, text: ''});
+
+    let handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+          return;
+        }
+        setMessage({open: false, text: ''});
+      };
 
     let login = () => {
         let user = document.getElementById('userId').value;
@@ -57,10 +72,17 @@ const Login = () => {
             }
         })
         .then((response) => {
-            console.log(response.status)
+            console.log(response.status);
         })
         .catch((error) => {
-            console.log('error response: ',error.response)
+            console.log('error response: ', error.response);
+            let message = '';
+            if (error.response.data.message === 'Missing credentials') {
+                message = 'Both User ID and Password are required';
+            } else {
+                message = error.response.data.message;
+            }
+            setMessage({open: true, text: message});
         });
     }
 
@@ -78,6 +100,24 @@ const Login = () => {
                     <div className={classes.buttonArea}>
                         <Button variant="contained" className={classes.loginItem} color="primary" onClick={login}>Login</Button>
                     </div>
+                    <Snackbar
+                        className={classes.snackbarError}
+                        anchorOrigin={{
+                        vertical: 'top',
+                        horizontal: 'center',
+                        }}
+                        open={message.open}
+                        autoHideDuration={6000}
+                        onClose={handleClose}
+                        message={message.text}
+                        action={
+                        <React.Fragment>
+                            <IconButton size="small" aria-label="close" color="inherit" onClick={handleClose}>
+                                <CloseIcon fontSize="small" />
+                            </IconButton>
+                        </React.Fragment>
+                        }
+                    />
                 </form>
             </div>
         </div>
