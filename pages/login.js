@@ -8,6 +8,7 @@ import Typography from '@material-ui/core/Typography';
 import Snackbar from '@material-ui/core/Snackbar';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
+import Router from 'next/router'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -73,6 +74,11 @@ const Login = () => {
         })
         .then((response) => {
             console.log(response.status);
+            if (response.status === 200) {
+                Router.push('/secured/dashboard');
+            } else {
+                setMessage({open: true, text: 'Unknown server response'});
+            }
         })
         .catch((error) => {
             console.log('error response: ', error.response);
