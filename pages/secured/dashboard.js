@@ -1,5 +1,4 @@
 import Head from 'next/head';
-import SideDrawer from '../../components/SideDrawer';
 import Layout from '../../components/Layout';
 
 const Dashboard = () => {
@@ -8,10 +7,12 @@ const Dashboard = () => {
       <Head>
         <title>EMS Dashboard</title>
       </Head>
-      <Layout/>
-      <div>
-        <p>This is the dashboard page</p>
-      </div>
+      <Layout>
+        <div>
+            <p>This is the dashboard page</p>
+        </div>
+      </Layout>
+
     </div>
   )};
 
