@@ -18,6 +18,18 @@ class User {
 		}
     };
 
+    async getAll(){
+        let query = `select user_id, first_name, last_name, status_id, created_date
+        from user`;
+        try {
+			let result = await this.connection.query(query);
+			return result;
+		}
+		catch(error){
+			throw error;
+		}
+    };
+
     async create(){
 
     };

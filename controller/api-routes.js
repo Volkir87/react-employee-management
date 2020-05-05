@@ -2,12 +2,13 @@ const express = require('express');
 const passport = require('../config/authConfigLocal');
 const bcrypt = require("bcryptjs");
 const authenticate = require('./authenticate');
+const isAuthenticated = require('../controller/isAuthenticated');
 const User = require('../model/user');
 
 const saltRounds = 10;
 let user = new User();
 
-// some useful functions
+// functions which will be used in the api calls
 let checkUserExists = async (req, res, next) => {
     let userId = req.body.userId;
     let userExists = await user.exists(userId);
@@ -48,6 +49,17 @@ apiRoutes.post('/user/updatePwd', async (req, res) => {
         res.status(200).send('Password updated successfully');
     }
 });
+
+apiRoutes.get('/user/getAll', async (req, res) => {
+    try {
+        let dbCallResult = await user.getAll();
+        let allUsers = dbCallResult[0];
+        res.status(200).json(allUsers);
+    }
+    catch(error) {
+        res.status(500).json({error: error});
+    }
+})
 
 // apiRoutes.post('/login', passport.authenticate("local", {failureMessage: 'Incorrect user name or password'}), (req, res) => {
 //     res.status(200).send('Success');
