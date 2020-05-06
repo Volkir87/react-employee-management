@@ -1,11 +1,20 @@
 import Head from 'next/head';
 import Layout from '../../../components/Layout';
 import axios from 'axios';
+import Table from '../../../components/Table';
 
 const Users = () => {
     const [users, setUsers] = React.useState({});
-    
-    let getUserInfo = () => {
+
+    const labels = {
+        user_id: 'User ID',
+        first_name: 'First Name',
+        last_name: 'Last Name',
+        status_id: 'Status ID',
+        created_date: 'Created Date'
+    }
+
+    const getUserInfo = () => {
         axios({
             method: 'get',
             url: '/api/user/getAll',
@@ -33,6 +42,7 @@ const Users = () => {
             <div>
                 <p>This is the users maintenance page</p>
             </div>
+            {users.length > 0 ? <Table labels = {labels} tableData = {users}/> : <p>Please wait</p>}
         </Layout>
 
         </div>
