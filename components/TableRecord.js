@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import TableCell from '@material-ui/core/TableCell';
+import TablePagination from '@material-ui/core/TablePagination';
+import TableRow from '@material-ui/core/TableRow';
 
 let TableRecord = ({record}) => {
     let id = '';
@@ -6,13 +9,13 @@ let TableRecord = ({record}) => {
         id = id + record[key];
     };
     return(
-        <tr>
+        <TableRow>
             {Object.keys(record).map((v,i) => {
                 return (
-                    <td id={id}>{record[v]}</td>
+                    <TableCell id={id}>{record[v]}</TableCell>
                 )
             })}
-        </tr>
+        </TableRow>
     )
 }
 

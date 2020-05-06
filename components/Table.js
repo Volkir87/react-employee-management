@@ -1,9 +1,31 @@
 import React, { useState, useEffect } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
 import TableRecord from "./TableRecord";
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 
+import MatTable from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TablePagination from '@material-ui/core/TablePagination';
+import TableRow from '@material-ui/core/TableRow';
+import Paper from '@material-ui/core/Paper';
+import TextField from '@material-ui/core/TextField';
+
+const useStyles = makeStyles({
+    table: {
+      minWidth: 650,
+    },
+    input: {
+        padding: '0.5px',
+    }
+  });
+
 let Table = ({labels, tableData}) => {
+
+    const classes = useStyles();
 
     const [data, setData] = useState({});
     const [sorting, setSortBy] = useState({
@@ -95,25 +117,25 @@ let Table = ({labels, tableData}) => {
     }, [filter]);
 
     return (
-        <div>
-            <table className='table table-striped mt-5'>
-                <thead className='thead-dark'>
-                <tr>
+        <TableContainer component={Paper}>
+            <MatTable className={classes.table} size="small" aria-label="a dense table">
+                <TableHead>
+                <TableRow>
                     {tableData.length > 0 ? Object.keys(tableData[0]).map((v) => {
-                        return <th id={v} onClick={applySort}>{labels[v]}<span>{checkSortSymbol(v)}</span></th>
-                    }) : <th>Please wait</th>}
-                </tr>
-                <tr>
+                        return <TableCell id={v} onClick={applySort}>{labels[v]}<span>{checkSortSymbol(v)}</span></TableCell>
+                    }) : <TableCell>Please wait</TableCell>}
+                </TableRow>
+                <TableRow>
                     {tableData.length > 0 ? Object.keys(tableData[0]).map((v) => {
-                        return <th><input id={v} onChange={applyFilter}></input></th>
-                    }) : <th>Please wait</th>}
-                </tr>
-                </thead>
-                <tbody>
+                        return <TableCell><TextField className={classes.input} id={v} onChange={applyFilter} variant="outlined" size="small" margin="dense"></TextField></TableCell>
+                    }) : <TableCell>Please wait</TableCell>}
+                </TableRow>
+                </TableHead>
+                <TableBody>
                     {(data.length > 0) ? data.map((v) => <TableRecord record={v}/>) : <tr><td>No records found</td></tr>}
-                </tbody>   
-            </table>                
-        </div>
+                </TableBody>   
+            </MatTable>                
+        </TableContainer>
     )
 }
 
