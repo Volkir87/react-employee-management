@@ -2,6 +2,8 @@ import Head from 'next/head';
 import Layout from '../../../components/Layout';
 import axios from 'axios';
 import Table from '../../../components/Table';
+import CreateUser from '../../../components/CreateUser';
+import createTypography from '@material-ui/core/styles/createTypography';
 
 const Users = () => {
     const [users, setUsers] = React.useState({});
@@ -41,6 +43,10 @@ const Users = () => {
         <Layout>
             <div>
                 <p>This is the users maintenance page</p>
+            </div>
+            <CreateUser/>
+            <div>
+                <p>All users</p>
             </div>
             {users.length > 0 ? <Table labels = {labels} tableData = {users}/> : <p>Please wait</p>}
         </Layout>

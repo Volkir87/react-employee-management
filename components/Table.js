@@ -20,6 +20,12 @@ const useStyles = makeStyles({
     },
     input: {
         padding: '0.5px',
+        borderStyle: 'solid',
+        borderRadius: '3px',
+        borderColor: '#949494',
+        borderWidth: '1px',
+        margin: '1px',
+        width: '100%'
     }
   });
 
@@ -127,7 +133,7 @@ let Table = ({labels, tableData}) => {
                 </TableRow>
                 <TableRow>
                     {tableData.length > 0 ? Object.keys(tableData[0]).map((v) => {
-                        return <TableCell><TextField className={classes.input} id={v} onChange={applyFilter} variant="outlined" size="small" margin="dense"></TextField></TableCell>
+                        return <TableCell><input className={classes.input} id={v} onChange={applyFilter}></input></TableCell>
                     }) : <TableCell>Please wait</TableCell>}
                 </TableRow>
                 </TableHead>
