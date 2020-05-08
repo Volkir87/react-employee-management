@@ -13,7 +13,8 @@ const Users = () => {
         first_name: 'First Name',
         last_name: 'Last Name',
         status_id: 'Status ID',
-        created_date: 'Created Date'
+        created_date: 'Created Date',
+        created_by: 'Created By'
     }
 
     const getUserInfo = () => {

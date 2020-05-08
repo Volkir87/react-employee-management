@@ -17,7 +17,7 @@ let checkUserExists = async (req, res, next) => {
         next();
     } else {
         //console.log('sending error');
-        res.status('400').send('ERROR: User with this userId already exists');
+        res.status(500).json({error: 'User with this User ID already exists'});
     }
 }
 
@@ -30,16 +30,29 @@ let hash = async function(password) {
 
 let apiRoutes = express.Router();
 
-apiRoutes.post('/user/create', checkUserExists, async (req, res) => {
-    console.log('ready to insert');
-    let {firstName, lastName, userId, password} = req.body;
-    let hashed = await hash(password); //hash the password before saving;
-    user.addNew(firstName, lastName, email, hashed)
-    .then(function(response) {res.send('200')})
-    .catch(function(err) {res.status(500).send('There was an error creating user: '+err)});
+apiRoutes.post('/user/create', isAuthenticated, checkUserExists, async (req, res) => {
+    try {
+        //console.log('ready to insert');
+        let {userId, firstName, lastName, password} = req.body;
+        //console.log(req.user);
+        let creator = req.user.user_id;
+        let hashed = await hash(password); //hash the password before saving;
+        let result = await user.create(userId, firstName, lastName, hashed, creator);
+        //console.log('result: ', result);
+        if (result === 1) {
+            //console.log('sending success response');
+            res.status(200).json({message: 'User created successfully'});
+        } else {
+            res.status(500).json({error: 'User could not be saved to the DB'})
+        }
+    }
+    catch(error) {
+        //console.log('server error: ', error);
+        res.status(500).json({error: error.toString()})
+    }
 });
 
-apiRoutes.post('/user/updatePwd', async (req, res) => {
+apiRoutes.post('/user/updatePwd', isAuthenticated, async (req, res) => {
     //console.log(req);
     let userId = req.body.userId;
     let newPassword = req.body.newPassword;
@@ -50,7 +63,7 @@ apiRoutes.post('/user/updatePwd', async (req, res) => {
     }
 });
 
-apiRoutes.get('/user/getAll', async (req, res) => {
+apiRoutes.get('/user/getAll', isAuthenticated, async (req, res) => {
     try {
         let dbCallResult = await user.getAll();
         let allUsers = dbCallResult[0];
