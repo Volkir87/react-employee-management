@@ -26,6 +26,10 @@ const useStyles = makeStyles({
         borderWidth: '1px',
         margin: '1px',
         width: '100%'
+    }, 
+    filter: {
+        paddingTop: '0.5px',
+        paddingBottom: '0.5px'
     }
   });
 
@@ -134,7 +138,7 @@ let Table = ({labels, tableData}) => {
                     </TableRow>
                     <TableRow key='filters'>
                         {tableData.length > 0 ? Object.keys(tableData[0]).map((v) => {
-                            return <TableCell key={v}><input className={classes.input} id={v} onChange={applyFilter}></input></TableCell>
+                            return <TableCell key={v} className={classes.filter}><input className={classes.input} id={v} onChange={applyFilter}></input></TableCell>
                         }) : <TableCell>Please wait</TableCell>}
                     </TableRow>
                     </TableHead>
