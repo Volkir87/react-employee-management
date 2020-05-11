@@ -4,7 +4,6 @@ import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
@@ -12,9 +11,12 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
 import ApplicationBar from './ApplicationBar';
+import PersonIcon from '@material-ui/icons/Person';
+import WorkIcon from '@material-ui/icons/Work';
+import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
+import SettingsIcon from '@material-ui/icons/Settings';
+import Router from 'next/router'
 
 const drawerWidth = 240;
 
@@ -83,6 +85,10 @@ const Layout = ({children}) => {
         
     };
 
+    const followLink = (link) => {
+        Router.push(link);
+    }
+
     return (
         <div>
             <ApplicationBar/>
@@ -106,23 +112,27 @@ const Layout = ({children}) => {
                             {open === false ? <ChevronRightIcon /> : <ChevronLeftIcon />}
                         </IconButton>
                     </div>
-                    <Divider />
+                    <Divider/>
                     <List>
-                    {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-                        <ListItem button key={text}>
-                        <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-                        <ListItemText primary={text} />
+                        <ListItem button key='Employees' onClick={() => {followLink('/secured/employees')}}>
+                            <ListItemIcon><PersonIcon/></ListItemIcon>
+                            <ListItemText primary='Employees'/>
                         </ListItem>
-                    ))}
+                        <ListItem button key='Positions' onClick={() => {followLink('/secured/positions')}}>
+                            <ListItemIcon><WorkIcon/></ListItemIcon>
+                            <ListItemText primary='Positions'/>
+                        </ListItem>
+                        <ListItem button key='Departments' onClick={() => {followLink('/secured/departments')}}>
+                            <ListItemIcon><AccountBalanceIcon/></ListItemIcon>
+                            <ListItemText primary='Departments'/>
+                        </ListItem>
                     </List>
-                    <Divider />
+                    <Divider/>
                     <List>
-                    {['All mail', 'Trash', 'Spam'].map((text, index) => (
-                        <ListItem button key={text}>
-                        <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-                        <ListItemText primary={text} />
+                        <ListItem button key='Admin' onClick={() => {followLink('/secured/admin/users')}}>
+                            <ListItemIcon><SettingsIcon/></ListItemIcon>
+                            <ListItemText primary='Admin'/>
                         </ListItem>
-                    ))}
                     </List>
                 </Drawer>
                 <main className={classes.content}>

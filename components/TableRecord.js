@@ -12,7 +12,7 @@ let TableRecord = ({record}) => {
         <TableRow>
             {Object.keys(record).map((v,i) => {
                 return (
-                    <TableCell id={id}>{record[v]}</TableCell>
+                    <TableCell key={id+i} id={id+i}>{record[v]}</TableCell>
                 )
             })}
         </TableRow>

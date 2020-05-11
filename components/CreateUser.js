@@ -53,11 +53,19 @@ const useStyles = makeStyles((theme) => ({
     },
   }));
 
-const CreateUser = () => {
+const CreateUser = ({updateUser}) => {
     const classes = useStyles();
 
     const [message, setMessage] = React.useState({open: false, text: ''});
 
+    //function to clear all elements
+    let clearValues = (elements) => {
+        for (let elem of elements) {
+            document.getElementById(elem).value = '';
+        }
+    }
+
+    //function to close the snackbar
     let handleClose = (event, reason) => {
         if (reason === 'clickaway') {
           return;
@@ -65,6 +73,7 @@ const CreateUser = () => {
         setMessage({open: false, text: ''});
       };
 
+    //function to handle creation of a user: make a call to the back end, and then display message on the response and update users on a page
     const handleCreation = () => {
         let userId = document.getElementById('userID').value;
         let firstName = document.getElementById('userName').value;
@@ -84,24 +93,21 @@ const CreateUser = () => {
         .then((response) => {
             if (response.status === 200) {
                 setMessage({open: true, text: 'User created successfully'});
-                document.getElementById('userID').value = '';
-                document.getElementById('userName').value = '';
-                document.getElementById('userLastName').value = '';
-                document.getElementById('initPwd').value = '';
+                clearValues(['userID', 'userName', 'userLastName', 'initPwd']);
+                console.log('response data data: ', response.data.data);
+                updateUser(response.data.data); //use the function supplied by the parent to update the state on the parent
             } else {
                 setMessage({open: true, text: 'Unknown server response'});
             }
         })
         .catch((error) => {
+            console.log(error);
             setMessage({open: true, text: error.response.data.error});
         });
     }
 
     const cancelCreation = () => {
-        document.getElementById('userID').value = '';
-        document.getElementById('userName').value = '';
-        document.getElementById('userLastName').value = '';
-        document.getElementById('initPwd').value = '';
+        clearValues(['userID', 'userName', 'userLastName', 'initPwd']);
     }
 
     return (

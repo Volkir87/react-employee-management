@@ -7,7 +7,7 @@ let user = new User();
 
 passport.use(new LocalStrategy( 
     function(username, password, done) {
-      user.getAllDetailsByUserId(username)
+      user.getAuthUserByUserId(username)
       .then(async function(userInfo){
         let result;
         if (userInfo[0].length < 1) {

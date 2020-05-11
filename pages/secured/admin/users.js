@@ -13,6 +13,7 @@ const Users = () => {
         first_name: 'First Name',
         last_name: 'Last Name',
         status_id: 'Status ID',
+        status: 'Status',
         created_date: 'Created Date',
         created_by: 'Created By'
     }
@@ -24,13 +25,19 @@ const Users = () => {
             withCredentials: true
         })
         .then((response) => {
-            console.log(response);
+            console.log('calling API');
             setUsers(response.data);
         })
         .catch((error) => {
             console.log(error);
         })
     }
+
+    const updateUserInfo = (newUser) => {
+        let newArray = [...users, newUser];
+        setUsers(newArray);
+    }
+
     // using useEffect hook to get all the users once the page is loaded (we don't need this info any time before that)
     React.useEffect(() => {
         getUserInfo();
@@ -45,11 +52,11 @@ const Users = () => {
             <div>
                 <p>This is the users maintenance page</p>
             </div>
-            <CreateUser/>
+            <CreateUser updateUser={updateUserInfo}/>
             <div>
                 <p>All users</p>
             </div>
-            {users.length > 0 ? <Table labels = {labels} tableData = {users}/> : <p>Please wait</p>}
+            {users.length > 0 ? <Table labels={labels} tableData={users}/> : <p>Please wait</p>}
         </Layout>
 
         </div>

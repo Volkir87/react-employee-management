@@ -19,8 +19,9 @@ class User {
     };
 
     async getAll(){
-        let query = `select user_id, first_name, last_name, status_id, created_date, created_by
-        from user`;
+        let query = `select u.user_id, u.first_name, u.last_name, ut.status, u.created_date, u.created_by
+        from user u
+        left outer join user_status ut on u.status_id = ut.id`;
         try {
 			let result = await this.connection.query(query);
 			return result;
@@ -57,6 +58,20 @@ class User {
     }
 
     async getAllDetailsByUserId(userId){
+        let query = `select u.user_id, u.first_name, u.last_name, ut.status, u.created_date, u.created_by
+        from user u
+        left outer join user_status ut on u.status_id = ut.id
+        where u.user_id = ?;`;
+        try {
+			let result = await this.connection.query(query, [userId]);
+			return result;
+		}
+		catch(error){
+			throw error;
+		}
+    };
+
+    async getAuthUserByUserId(userId){
         let query = `select *
         from user
         where user_id = ?;`;

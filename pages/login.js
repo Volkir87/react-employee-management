@@ -61,7 +61,8 @@ const Login = () => {
         setMessage({open: false, text: ''});
       };
 
-    let login = () => {
+    let login = (e) => {
+        e.preventDefault();
         let user = document.getElementById('userId').value;
         let password = document.getElementById('password').value;
         axios({
@@ -99,12 +100,12 @@ const Login = () => {
             </Head>
             <ApplicationBar></ApplicationBar>
             <div className={classes.loginArea}>
-                <form className={classes.loginForm} noValidate autoComplete="off">
+                <form className={classes.loginForm} noValidate autoComplete="off" onSubmit={login}>
                     <Typography variant='h6'>Login</Typography>
                     <TextField id="userId" className={classes.loginItem} label="User ID" variant="outlined"/>
                     <TextField id="password" className={classes.loginItem} label="Password" variant="outlined" type="password" autoComplete="current-password"/>
                     <div className={classes.buttonArea}>
-                        <Button variant="contained" className={classes.loginItem} color="primary" onClick={login}>Login</Button>
+                        <Button variant="contained" className={classes.loginItem} color="primary" type='submit'>Login</Button>
                     </div>
                     <Snackbar
                         className={classes.snackbarError}

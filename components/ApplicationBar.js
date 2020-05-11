@@ -21,7 +21,7 @@ const ApplicationBar = () => {
     const classes = useStyles();
     return (
     <div className={classes.root}>
-        <AppBar position="static">
+        <AppBar position='fixed'>
             <Toolbar>
                 <PeopleAltIcon style={{ color: 'white'}}/>
                 <Typography variant="h6" className={classes.title}>
@@ -32,6 +32,8 @@ const ApplicationBar = () => {
                 </Typography>
             </Toolbar>
         </AppBar>
+        {/* second Toolbar is to shift content down (this is advised by Material-UI) */}
+        <Toolbar/>
     </div>
     )
 }

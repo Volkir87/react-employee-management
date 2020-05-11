@@ -123,25 +123,36 @@ let Table = ({labels, tableData}) => {
     }, [filter]);
 
     return (
-        <TableContainer component={Paper}>
-            <MatTable className={classes.table} size="small" aria-label="a dense table">
-                <TableHead>
-                <TableRow>
-                    {tableData.length > 0 ? Object.keys(tableData[0]).map((v) => {
-                        return <TableCell id={v} onClick={applySort}>{labels[v]}<span>{checkSortSymbol(v)}</span></TableCell>
-                    }) : <TableCell>Please wait</TableCell>}
-                </TableRow>
-                <TableRow>
-                    {tableData.length > 0 ? Object.keys(tableData[0]).map((v) => {
-                        return <TableCell><input className={classes.input} id={v} onChange={applyFilter}></input></TableCell>
-                    }) : <TableCell>Please wait</TableCell>}
-                </TableRow>
-                </TableHead>
-                <TableBody>
-                    {(data.length > 0) ? data.map((v) => <TableRecord record={v}/>) : <tr><td>No records found</td></tr>}
-                </TableBody>   
-            </MatTable>                
-        </TableContainer>
+        <div>
+            <TableContainer component={Paper}>
+                <MatTable className={classes.table} stickyHeader size="small" aria-label="a dense table">
+                    <TableHead>
+                    <TableRow key='header'>
+                        {tableData.length > 0 ? Object.keys(tableData[0]).map((v) => {
+                            return <TableCell key={v} id={v} onClick={applySort}>{labels[v]}<span>{checkSortSymbol(v)}</span></TableCell>
+                        }) : <TableCell>Please wait</TableCell>}
+                    </TableRow>
+                    <TableRow key='filters'>
+                        {tableData.length > 0 ? Object.keys(tableData[0]).map((v) => {
+                            return <TableCell key={v}><input className={classes.input} id={v} onChange={applyFilter}></input></TableCell>
+                        }) : <TableCell>Please wait</TableCell>}
+                    </TableRow>
+                    </TableHead>
+                    <TableBody key='body'>
+                        {(data.length > 0) ? data.map((v, i) => <TableRecord key={i} record={v}/>) : <tr><td>No records found</td></tr>}
+                    </TableBody>   
+                </MatTable>                
+            </TableContainer>
+            {/* <TablePagination
+            rowsPerPageOptions={[5, 10, 25]}
+            component="div"
+            count={rows.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onChangePage={handleChangePage}
+            onChangeRowsPerPage={handleChangeRowsPerPage}
+            /> */}
+        </div>
     )
 }
 

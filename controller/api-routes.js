@@ -41,7 +41,8 @@ apiRoutes.post('/user/create', isAuthenticated, checkUserExists, async (req, res
         //console.log('result: ', result);
         if (result === 1) {
             //console.log('sending success response');
-            res.status(200).json({message: 'User created successfully'});
+            let newUser = await user.getAllDetailsByUserId(userId);
+            res.status(200).json({message: 'User created successfully', data: newUser[0][0]});
         } else {
             res.status(500).json({error: 'User could not be saved to the DB'})
         }
