@@ -26,7 +26,7 @@ let checkUserHasRole = async (req, res, next) => {
     let userId = req.body.userId;
     let roleId = req.body.roleId;
     let userHasRole = await user.hasRole(userId, roleId);
-    //console.log('response = ',response);
+    //console.log('response = ', userHasRole);
     if (!userHasRole) {
         next();
     } else {
@@ -116,6 +116,28 @@ apiRoutes.get('/user/getRoles', isAuthenticated, async (req, res) => {
         let dbCallResult = await user.getUserRole();
         let allUserRoles = dbCallResult[0];
         res.status(200).json(allUserRoles);
+    }
+    catch(error) {
+        res.status(500).json({error: error});
+    }
+});
+
+apiRoutes.get('/user/getUserList', isAuthenticated, async (req, res) => {
+    try {
+        let dbCallResult = await user.getUserList();
+        let allUsers = dbCallResult[0];
+        res.status(200).json(allUsers);
+    }
+    catch(error) {
+        res.status(500).json({error: error});
+    }
+});
+
+apiRoutes.get('/user/getRoleList', isAuthenticated, async (req, res) => {
+    try {
+        let dbCallResult = await user.getRoleList();
+        let allRoles = dbCallResult[0];
+        res.status(200).json(allRoles);
     }
     catch(error) {
         res.status(500).json({error: error});

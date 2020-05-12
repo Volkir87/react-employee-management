@@ -2,7 +2,7 @@ import Head from 'next/head';
 import Layout from '../../../components/Layout';
 import axios from 'axios';
 import Table from '../../../components/Table';
-import CreateUser from '../../../components/CreateUser';
+import AssignUserRole from '../../../components/AssignUserRole';
 import createTypography from '@material-ui/core/styles/createTypography';
 
 const Roles = () => {
@@ -56,7 +56,7 @@ const Roles = () => {
             <div>
                 <p>This is the user roles maintenance page</p>
             </div>
-
+            <AssignUserRole/>
             <div>
                 <p>All users and their roles</p>
             </div>

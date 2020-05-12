@@ -9,7 +9,9 @@ insert into `user` (`user_id`, `first_name`, `last_name`, `password`,
 ('admin', 'Admin', '', NULL, 1, 'system');
 
 insert into `role` (`name`, `description`, `created_by`) values 
-('Admin', 'Provides administrative access', 'system');
+('Admin', 'Provides administrative access', 'system'),
+('HR', 'Provides regular HR user access', 'system'),
+('HR Manager', 'Provides HR manager access', 'system');
 
 insert into `user_role` (`user_id`, `role_id`, `assigned_by`) values 
 (1, 1, 'system');

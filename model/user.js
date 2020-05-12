@@ -107,8 +107,12 @@ class User {
         from user_role 
         where user_id = ? and role_id = ?;`;
         try {
-			let result = await this.connection.query(query, [userId, roleId]);
-			return result;
+            let result = await this.connection.query(query, [userId, roleId]);
+            if (result[0].length > 0) {
+                return true;
+            } else {
+                return false;
+            }
 		}
 		catch(error){
             //console.log(error);
@@ -172,7 +176,32 @@ class User {
 		catch(error){
 			throw error;
 		}
-    }
+    };
+
+    async getUserList(){
+        let query = `select id, user_id
+        from user
+        where status_id = 1;`;
+        try {
+			let result = await this.connection.query(query);
+			return result;
+		}
+		catch(error){
+			throw error;
+		}
+    };
+
+    async getRoleList(){
+        let query = `select id, name
+        from role;`;
+        try {
+			let result = await this.connection.query(query);
+			return result;
+		}
+		catch(error){
+			throw error;
+		}
+    };
 
 }
 
