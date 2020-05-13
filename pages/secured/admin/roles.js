@@ -37,10 +37,20 @@ const Roles = () => {
         })
     }
 
-    // const updateUserInfo = (newUser) => {
-    //     let newArray = [...users, newUser];
-    //     setUsers(newArray);
-    // }
+    const findUserIndex = (userId) => {
+        for (let i in userRoles) {
+            if (userRoles[i].user_id === userId) {
+                return i;
+            }
+        }
+        return 0;
+    }
+
+    const updateUserInfo = (newUserRole) => {
+        let newArray = userRoles.slice(0);
+        newArray[findUserIndex(newUserRole.user_id)] = newUserRole;
+        setuserRoles(newArray);
+    }
 
     // using useEffect hook to get all the users once the page is loaded (we don't need this info any time before that)
     React.useEffect(() => {
@@ -56,7 +66,7 @@ const Roles = () => {
             <div>
                 <p>This is the user roles maintenance page</p>
             </div>
-            <AssignUserRole/>
+            <AssignUserRole update={updateUserInfo}/>
             <div>
                 <p>All users and their roles</p>
             </div>

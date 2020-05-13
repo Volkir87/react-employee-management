@@ -65,7 +65,7 @@ const useStyles = makeStyles((theme) => ({
       },
   }));
 
-const AssignUserRole = () => {
+const AssignUserRole = ({update}) => {
     const classes = useStyles();
 
     const [message, setMessage] = React.useState({open: false, text: ''});
@@ -137,7 +137,7 @@ const AssignUserRole = () => {
                 setUser('');
                 setRole('');
                 console.log('response data data: ', response.data.data);
-                //updateUser(response.data.data); //use the function supplied by the parent to update the state on the parent
+                update(response.data.data); //use the function supplied by the parent to update the state on the parent
             } else {
                 setMessage({open: true, text: 'Unknown server response'});
             }
