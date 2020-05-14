@@ -129,7 +129,7 @@ const Layout = ({children}) => {
                     </List>
                     <Divider/>
                     <List>
-                        <ListItem button key='Admin' onClick={() => {followLink('/secured/admin/users')}}>
+                        <ListItem button key='Admin' onClick={() => {followLink('/secured/admin/main')}}>
                             <ListItemIcon><SettingsIcon/></ListItemIcon>
                             <ListItemText primary='Admin'/>
                         </ListItem>
