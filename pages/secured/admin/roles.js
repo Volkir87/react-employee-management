@@ -3,7 +3,6 @@ import Layout from '../../../components/Layout';
 import axios from 'axios';
 import Table from '../../../components/Table';
 import AssignUserRole from '../../../components/AssignUserRole';
-import createTypography from '@material-ui/core/styles/createTypography';
 
 const Roles = () => {
     const [userRoles, setuserRoles] = React.useState({});

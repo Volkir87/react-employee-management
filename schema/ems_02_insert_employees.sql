@@ -6,7 +6,7 @@ insert into `user_status` (status, description) values
 
 insert into `user` (`user_id`, `first_name`, `last_name`, `password`, 
 `status_id`, `created_by`) values 
-('admin', 'Admin', '', NULL, 1, 'system');
+('admin', 'Admin', '', '$2a$10$kbMqoEkNJPQBZ2o4Vyv/GeseyHwlHdj/KXuAGw50K07f90jgfnZau', 1, 'system');
 
 insert into `role` (`name`, `description`, `created_by`) values 
 ('Admin', 'Provides administrative access', 'system'),

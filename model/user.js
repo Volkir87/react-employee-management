@@ -1,3 +1,11 @@
+/*
+Employee.js
+Author: Kirill Volodkin
+Created date: 2020-05-01
+
+The script creates and supports User class which is responsible for running user-related queries.
+*/
+
 const connection = require('../config/db-connection');
 
 class User {

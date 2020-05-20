@@ -44,7 +44,9 @@ CREATE TABLE `employee` (
   `position_id` int,
   `manager_id` int,
   `created_date` timestamp DEFAULT (now()),
-  `created_by` varchar(20)
+  `created_by` varchar(20),
+  `start_date` timestamp,
+  `termination_date` timestamp
 );
 
 CREATE TABLE `position` (
@@ -57,10 +59,12 @@ CREATE TABLE `position` (
 
 CREATE TABLE `department` (
   `id` int PRIMARY KEY AUTO_INCREMENT,
-  `name` varchar(255)
+  `name` varchar(255),
+  `created_date` timestamp DEFAULT (now()),
+  `created_by` varchar(255)
 );
 
-CREATE TABLE `empSalary` (
+CREATE TABLE `employee_salary` (
   `id` int PRIMARY KEY AUTO_INCREMENT,
   `employee_id` int,
   `salary` int,
@@ -68,13 +72,30 @@ CREATE TABLE `empSalary` (
   `updated_by` varchar(20)
 );
 
+CREATE TABLE `employee_status` (
+  `id` int PRIMARY KEY AUTO_INCREMENT,
+  `name` varchar(255),
+  `description` varchar(255),
+  `created_date` timestamp DEFAULT (now()),
+  `created_by` varchar(255)
+);
+
+CREATE TABLE `employment_type` (
+  `id` int PRIMARY KEY AUTO_INCREMENT,
+  `name` varchar(255),
+  `description` varchar(255),
+  `created_date` timestamp DEFAULT (now()),
+  `created_by` varchar(255)
+);
+
+
 ALTER TABLE `employee` ADD FOREIGN KEY (`manager_id`) REFERENCES `employee` (`id`);
 
 ALTER TABLE `employee` ADD FOREIGN KEY (`position_id`) REFERENCES `position` (`id`);
 
 ALTER TABLE `position` ADD FOREIGN KEY (`department_id`) REFERENCES `department` (`id`);
 
-ALTER TABLE `empSalary` ADD FOREIGN KEY (`employee_id`) REFERENCES `employee` (`id`);
+ALTER TABLE `employee_salary` ADD FOREIGN KEY (`employee_id`) REFERENCES `employee` (`id`);
 
 ALTER TABLE `user_role` ADD FOREIGN KEY (`role_id`) REFERENCES `role` (`id`);
 
@@ -82,3 +103,6 @@ ALTER TABLE `user_role` ADD FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
 
 ALTER TABLE `user` ADD FOREIGN KEY (`status_id`) REFERENCES `user_status` (`id`);
 
+ALTER TABLE `employee` ADD FOREIGN KEY (`status_id`) REFERENCES `employee_status` (`id`);
+
+ALTER TABLE `employee` ADD FOREIGN KEY (`employment_type_id`) REFERENCES `employment_type` (`id`);

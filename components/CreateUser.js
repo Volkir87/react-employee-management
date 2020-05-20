@@ -79,6 +79,10 @@ const CreateUser = ({updateUser}) => {
         let firstName = document.getElementById('userName').value;
         let lastName = document.getElementById('userLastName').value;
         let password = document.getElementById('initPwd').value;
+        if (userId === '' || firstName === '' || lastName === '' || password === '') {
+            setMessage({open: true, text: 'All fields are required'});
+            return;
+        }
         axios({
             method: 'post',
             url: '/api/user/create',
