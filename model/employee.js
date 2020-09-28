@@ -37,15 +37,16 @@ class Employee {
         }
     }
 
-    viewEmployees(){
+    async viewEmployees(){
         let query = 
-            `select e1.first_name as 'First Name', e1.last_name as 'Last Name', r.title as 'Title', d.name as 'Department', 
+            `select e1.first_name, e1.last_name, p.title, d.name, 
             case when e1.manager_id is not null then concat(e2.first_name, ' ', e2.last_name)
-            else 'No manager' end as 'Manager'
+            else 'No manager' end as 'manager',
+			e1.start_date
             from employee e1
             left outer join employee e2 on e1.manager_id = e2.id
-            left outer join role r on e1.role_id = r.id
-            left outer join department d on r.department_id = d.id;`
+            left outer join position p on p.id = e1.position_id
+			left outer join department d on p.department_id = d.id;`
         try {
             let result = await this.connection.query(query);
             return result;
@@ -55,7 +56,7 @@ class Employee {
         }
     };
 
-    viewEmployeesByManager(managerId){ // do I need this?
+    async viewEmployeesByManager(managerId){ // do I need this?
         let query = 
             `select e1.first_name as 'First Name', e1.last_name as 'Last Name', r.title as 'Title', d.name as 'Department', 
             case when e1.manager_id is not null then concat(e2.first_name, ' ', e2.last_name)
@@ -74,7 +75,7 @@ class Employee {
         }
     }
 
-    addEmployee(firstName, lastName, roleId, managerId, startDate) {
+    async addEmployee(firstName, lastName, roleId, managerId, startDate) {
         let query = `insert into employee (first_name, last_name, role_id, manager_id, start_date) 
             values (?, ?, ?, ?, ?);`;
         try {
@@ -86,7 +87,7 @@ class Employee {
         }
     }
 
-    deleteEmployee(id) {
+    async deleteEmployee(id) {
         let query = `delete from employee where id = ?;`;
         try {
             await this.connection.query(query, [id]);
@@ -97,7 +98,7 @@ class Employee {
         }
     }
     
-    terminateEmployee(id, terminationDate) {
+    async terminateEmployee(id, terminationDate) {
         let query = `update employee 
         set where id = ?;`;
         try {
@@ -109,7 +110,7 @@ class Employee {
         }
     }
 
-    updateEmployeeRole(id, roleId){
+    async updateEmployeeRole(id, roleId){
         let query = `update employee set role_id = ? where id = ?;`;
         try {
             await this.connection.query(query, [roleId, id]);
@@ -120,7 +121,7 @@ class Employee {
         }        
     }
 
-    updateEmployeeManager(id, managerId){
+    async updateEmployeeManager(id, managerId){
         let query = `update employee set manager_id = ? where id = ?`;
         try {
             await this.connection.query(query, [managerId, id]);

@@ -4,9 +4,13 @@ const bcrypt = require("bcryptjs");
 const authenticate = require('./authenticate');
 const isAuthenticated = require('../controller/isAuthenticated');
 const User = require('../model/user');
+const Employee = require('../model/employee');
+const Department = require('../model/department');
 
 const saltRounds = 10;
 let user = new User();
+let employee = new Employee();
+let department = new Department();
 
 // functions which will be used in the api calls
 let checkUserExists = async (req, res, next) => {
@@ -18,6 +22,18 @@ let checkUserExists = async (req, res, next) => {
     } else {
         //console.log('sending error');
         res.status(500).json({error: 'User with this User ID already exists'});
+    }
+};
+
+let checkDeptExists = async (req, res, next) => {
+    let deptName = req.body.departmentName;
+    let deptExists = await department.exists(deptName);
+    //console.log('response = ',response);
+    if (!deptExists) {
+        next();
+    } else {
+        //console.log('sending error');
+        res.status(500).json({error: 'Department with this name already exists'});
     }
 };
 
@@ -44,6 +60,15 @@ let hash = async function(password) {
 
 let apiRoutes = express.Router();
 
+apiRoutes.get('/user/getCurrent', isAuthenticated, async (req, res) => {
+    try {
+        res.status(200).json({user: req.user.user_id});
+    }
+    catch(error) {
+        res.status(500).json({error: 'User was not found'});
+    }
+});
+
 apiRoutes.post('/user/create', isAuthenticated, checkUserExists, async (req, res) => {
     try {
         //console.log('ready to insert');
@@ -58,7 +83,7 @@ apiRoutes.post('/user/create', isAuthenticated, checkUserExists, async (req, res
             let newUser = await user.getAllDetailsByUserId(userId);
             res.status(200).json({message: 'User created successfully', data: newUser[0][0]});
         } else {
-            res.status(500).json({error: 'User could not be saved to the DB'})
+            res.status(500).json({error: 'User could not be saved to the DB'});
         }
     }
     catch(error) {
@@ -157,6 +182,49 @@ apiRoutes.get('/logout', function(req, res){
     res.redirect('/login');
 });
 
+// Employee routes
 
+apiRoutes.get('/employees/getAll', isAuthenticated, async (req, res) => {
+    try {
+        let dbCallResult = await employee.viewEmployees();
+        let allEmployees = dbCallResult[0];
+        res.status(200).json(allEmployees);
+    }
+    catch(error) {
+        res.status(500).json({error: error});
+    }
+});
+
+
+// Department routes
+
+apiRoutes.get('/departments/getAll', isAuthenticated, async (req, res) => {
+    try {
+        let dbCallResult = await department.getAll();
+        let allDepartments = dbCallResult[0];
+        res.status(200).json(allDepartments);
+    }
+    catch(error) {
+        res.status(500).json({error: error});
+    }
+});
+
+apiRoutes.post('/department/create', isAuthenticated, checkDeptExists, async (req, res) => {
+    try {
+        let deptName = req.body.departmentName;
+        let creator = req.user.user_id;
+        let result = await department.create(deptName, creator);
+        if (result === 1) {
+            let newDept = await department.getAllDetailsByDeptName(deptName);
+            res.status(200).json({message: 'Department created successfully', data: newDept[0][0]});
+        } else {
+            res.status(500).json({error: 'Department could not be saved to the DB'});
+        }
+    }
+    catch(error) {
+        console.log('server error: ', error);
+        res.status(500).json({error: error.toString()})
+    }
+});
 
 module.exports = apiRoutes;

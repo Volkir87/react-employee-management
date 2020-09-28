@@ -42,6 +42,7 @@ app.prepare()
     server.get('*', (req, res) => {
         return handle(req, res);
     });
+
     server.listen(PORT, (err) => {
         if (err) throw err;
         console.log('Application is ready on port: ', PORT);

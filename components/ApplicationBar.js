@@ -3,6 +3,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Typography from '@material-ui/core/Typography';
 import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
 import Toolbar from '@material-ui/core/ToolBar';
+import axios from 'axios';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -18,6 +19,28 @@ const useStyles = makeStyles((theme) => ({
   }));
 
 const ApplicationBar = () => {
+    const [user, setUser] = React.useState({});
+
+    const getUser = () => {
+        axios({
+            method: 'get',
+            url: '/api/user/getCurrent',
+            withCredentials: true
+        })
+        .then((response) => {
+            setUser(response);
+            console.log('user: ', user.data);
+        })
+        .catch((error) => {
+            console.log(error);
+        })
+    }
+
+    // using useEffect hook to get the user once the page is loaded
+    React.useEffect(() => {
+        getUser();
+    }, []);
+
     const classes = useStyles();
     return (
     <div className={classes.root}>
@@ -28,7 +51,7 @@ const ApplicationBar = () => {
                     Employee Management System
                 </Typography>
                 <Typography variant="subtitle2">
-                    %User%
+                    {(user.data) ? user.data.user : '-'}
                 </Typography>
             </Toolbar>
         </AppBar>
@@ -37,5 +60,6 @@ const ApplicationBar = () => {
     </div>
     )
 }
+
 
 export default ApplicationBar;

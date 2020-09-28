@@ -53,7 +53,7 @@ const useStyles = makeStyles((theme) => ({
     },
   }));
 
-const CreateUser = ({updateUser}) => {
+const CreateDepartment = ({updateDepartment}) => {
     const classes = useStyles();
 
     const [message, setMessage] = React.useState({open: false, text: ''});
@@ -66,52 +66,46 @@ const CreateUser = ({updateUser}) => {
     }
 
     //function to close the snackbar
-    let handleClose = (event, reason) => {
+    const handleClose = (event, reason) => {
         if (reason === 'clickaway') {
           return;
         }
         setMessage({open: false, text: ''});
       };
 
-    //function to handle creation of a user: make a call to the back end, and then display message on the response and update users on a page
+    //function to handle creation of a new department: make a call to the back end, and then display message on the response and update departments on a page
     const handleCreation = () => {
-        let userId = document.getElementById('userID').value;
-        let firstName = document.getElementById('userName').value;
-        let lastName = document.getElementById('userLastName').value;
-        let password = document.getElementById('initPwd').value;
-        if (userId === '' || firstName === '' || lastName === '' || password === '') {
+        console.log('creating a dept');
+        let departmentName = document.getElementById('departmentName').value;
+        if (departmentName === '') {
             setMessage({open: true, text: 'All fields are required'});
             return;
         }
         axios({
             method: 'post',
-            url: '/api/user/create',
+            url: '/api/department/create',
             data: {
-                userId: userId,
-                firstName: firstName,
-                lastName: lastName,
-                password: password
+                departmentName: departmentName
             },
             withCredentials: true
         })
         .then((response) => {
             if (response.status === 200) {
-                setMessage({open: true, text: 'User created successfully'});
-                clearValues(['userID', 'userName', 'userLastName', 'initPwd']);
-                console.log('response data data: ', response.data.data);
-                updateUser(response.data.data); //use the function supplied by the parent to update the state on the parent
+                setMessage({open: true, text: 'Department created successfully'});
+                clearValues(['departmentName']);
+                updateDepartment(response.data.data); //use the function supplied by the parent to update the state on the parent
             } else {
                 setMessage({open: true, text: 'Unknown server response'});
             }
         })
         .catch((error) => {
-            console.log(error);
+            console.log('error: ', error);
             setMessage({open: true, text: error.response.data.error});
         });
     }
 
     const cancelCreation = () => {
-        clearValues(['userID', 'userName', 'userLastName', 'initPwd']);
+        clearValues(['departmentName']);
     }
 
     return (
@@ -123,15 +117,12 @@ const CreateUser = ({updateUser}) => {
             id="panel1c-header"
           >
             <div className={classes.column}>
-              <Typography className={classes.heading}>Create New User</Typography>
+              <Typography className={classes.heading}>Create New Department</Typography>
             </div>
           </ExpansionPanelSummary>
           <ExpansionPanelDetails className={classes.details}>
             <div className={classes.column}>
-                <TextField id="userID" className={classes.inputField} label="User ID" variant="outlined" size="small"/>
-                <TextField id="userName" className={classes.inputField} label="First Name" variant="outlined" size="small"/>
-                <TextField id="userLastName" className={classes.inputField} label="Last Name" variant="outlined" size="small"/>
-                <TextField id="initPwd" className={classes.inputField} label="Initial Password" variant="outlined" size="small"/>
+                <TextField id="departmentName" className={classes.inputField} label="Department Name" variant="outlined" size="small"/>
             </div>
           </ExpansionPanelDetails>
           <Divider />
@@ -162,4 +153,4 @@ const CreateUser = ({updateUser}) => {
     );
 }
 
-export default CreateUser;
+export default CreateDepartment;
