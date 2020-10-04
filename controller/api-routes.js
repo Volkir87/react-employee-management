@@ -6,11 +6,13 @@ const isAuthenticated = require('../controller/isAuthenticated');
 const User = require('../model/user');
 const Employee = require('../model/employee');
 const Department = require('../model/department');
+const Position = require('../model/position');
 
 const saltRounds = 10;
 let user = new User();
 let employee = new Employee();
 let department = new Department();
+let position = new Position();
 
 // functions which will be used in the api calls
 let checkUserExists = async (req, res, next) => {
@@ -198,6 +200,17 @@ apiRoutes.get('/employees/getAll', isAuthenticated, async (req, res) => {
 
 // Department routes
 
+apiRoutes.get('/departments/getDeptList', isAuthenticated, async (req, res) => {
+    try {
+        let dbCallResult = await department.getList();
+        let allDepartments = dbCallResult[0];
+        res.status(200).json(allDepartments);
+    }
+    catch(error) {
+        res.status(500).json({error: error});
+    }
+});
+
 apiRoutes.get('/departments/getAll', isAuthenticated, async (req, res) => {
     try {
         let dbCallResult = await department.getAll();
@@ -226,5 +239,19 @@ apiRoutes.post('/department/create', isAuthenticated, checkDeptExists, async (re
         res.status(500).json({error: error.toString()})
     }
 });
+
+// Positions routes
+
+apiRoutes.get('/positions/getAll', isAuthenticated, async (req, res) => {
+    try {
+        let dbCallResult = await position.getAll();
+        let allPositions = dbCallResult[0];
+        res.status(200).json(allPositions);
+    }
+    catch(error) {
+        res.status(500).json({error: error});
+    }
+});
+
 
 module.exports = apiRoutes;

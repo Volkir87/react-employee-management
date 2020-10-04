@@ -43,7 +43,7 @@ const Departments = () => {
             </Head>
             <Layout>
                 <div>
-                    <p>This is the departments maintenance page</p>
+                    <p>Departments Maintenance</p>
                 </div>
                 <CreateDepartment updateDepartment={updateDepartmentInfo}></CreateDepartment>
                 <div>

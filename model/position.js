@@ -3,18 +3,18 @@ Employee.js
 Author: Kirill Volodkin
 Created date: 2020-05-01
 
-The script creates and supports Department class which is responsible for running user-related queries.
+The script creates and supports Position class which is responsible for running user-related queries.
 */
 
 const connection = require('../config/db-connection');
 
-class Department {
+class Position {
     constructor(){
         this.connection = connection;
     };
 
     async getById(id){
-        let query = `select * from department
+        let query = `select * from position
                where id = ?;`;
         try {
 			let result = await this.connection.query(query, [id]);
@@ -27,19 +27,21 @@ class Department {
 
     async getAll(){
         let query = `
-        select name, date_format(created_date, '%Y-%m-%d') as 'created_date', created_by 
-        from department;
+        select p.title, d.name as 'department_name', date_format(p.created_date, '%Y-%m-%d') as 'created_date', p.created_by
+        from position p
+        left join department d on p.department_id = d.id;
         `;
         try {
 			let result = await this.connection.query(query);
 			return result;
 		}
 		catch(error){
+            console.log(error);
 			throw error;
 		}
     };
 
-    async exists(deptName){
+    async exists(posName, deptName){
         let query = `select * from department where name = ?;`
         try {
 			let result = await this.connection.query(query, [deptName]);
@@ -75,17 +77,6 @@ class Department {
 			throw error;
 		}
     };
-
-    async getList(){
-        let query = `select id, name from department;`
-        try {
-			let result = await this.connection.query(query);
-            return result;
-		}
-		catch(error){
-			throw error;
-		}
-    }
 }
 
-module.exports = Department;
+module.exports = Position;
