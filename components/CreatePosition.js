@@ -39,6 +39,8 @@ const useStyles = makeStyles((theme) => ({
     },
     column: {
       flexBasis: '100%',
+      display: 'flex',
+      alignItems: 'center',
     },
     helper: {
       borderLeft: `2px solid ${theme.palette.divider}`,
@@ -54,10 +56,14 @@ const useStyles = makeStyles((theme) => ({
     inputField: {
         marginRight: '0.5rem',
         marginLeft: '0.5rem',
+        // display: 'flex',
+        width: 240,
+        justifyContent: 'center'
     },
     formControl: {
-        margin: theme.spacing(1),
-        minWidth: 120,
+        marginRight: '0.5rem',
+        marginLeft: '0.5rem',
+        minWidth: 240,
         height: 60,
       },
   }));
@@ -102,8 +108,8 @@ const CreatePosition = ({updatePosition}) => {
     const handleCreation = () => {
         //console.log('creating a dept');
         let positionName = document.getElementById('positionName').value;        
-        let departmentName = document.getElementById('departmentName').value;
-        if (departmentName === '' || positionName === '') {
+        //let departmentName = document.getElementById('departmentName').value;
+        if (department === '' || positionName === '') {
             setMessage({open: true, text: 'All fields are required'});
             return;
         }
@@ -111,7 +117,7 @@ const CreatePosition = ({updatePosition}) => {
             method: 'post',
             url: '/api/position/create',
             data: {
-                departmentName: departmentName,
+                departmentId: department,
                 positionName: positionName
             },
             withCredentials: true
@@ -133,6 +139,7 @@ const CreatePosition = ({updatePosition}) => {
 
     const cancelCreation = () => {
         clearValues(['departmentName', 'positionName']);
+        setDepartment('');
     }
 
     const handleDeptSelection = (event) => {
@@ -157,9 +164,10 @@ const CreatePosition = ({updatePosition}) => {
                     <InputLabel id="deptLabel">Department</InputLabel>
                     <Select
                     labelId="deptLabel"
-                    id="deptId"
+                    id="departmentName"
                     value={department}
                     onChange={handleDeptSelection}
+                    size="small"
                     >
                     {(allDepts.length > 0) ? allDepts.map((v) => {
                         return <MenuItem key={v.id} value={v.id}>{v.name}</MenuItem>

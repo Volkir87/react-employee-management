@@ -41,10 +41,10 @@ class Position {
 		}
     };
 
-    async exists(posName, deptName){
-        let query = `select * from department where name = ?;`
+    async exists(deptId, positionName){
+        let query = `select * from position where department_id = ? and title = ?;`
         try {
-			let result = await this.connection.query(query, [deptName]);
+			let result = await this.connection.query(query, [deptId, positionName]);
             if (result[0].length > 0) {
                 return true;
             } else {
@@ -56,10 +56,13 @@ class Position {
 		}
     };
 
-    async getAllDetailsByDeptName(deptName){
-        let query = `select name, created_date, created_by from department where name = ?;`
+    async getAllDetailsByPositionName(positionName, deptId){
+        let query = `select p.title, d.name as 'department_name', date_format(p.created_date, '%Y-%m-%d') as 'created_date', p.created_by
+        from position p
+        left join department d on p.department_id = d.id 
+        where title = ? and department_id = ?;`
         try {
-			let result = await this.connection.query(query, [deptName]);
+			let result = await this.connection.query(query, [positionName, deptId]);
             return result;
 		}
 		catch(error){
@@ -67,10 +70,10 @@ class Position {
 		}
     };
     
-    async create(deptName, createdBy){
-        let query = `insert into department(name, created_by) values (?, ?);`
+    async create(positionName, deptId, createdBy){
+        let query = 'insert into `position` (title, department_id, created_by) values (?, ?, ?);'
         try {
-			await this.connection.query(query, [deptName, createdBy]);
+			await this.connection.query(query, [positionName, deptId, createdBy]);
             return 1;
 		}
 		catch(error){

@@ -25,7 +25,7 @@ let checkUserExists = async (req, res, next) => {
         //console.log('sending error');
         res.status(500).json({error: 'User with this User ID already exists'});
     }
-};
+}
 
 let checkDeptExists = async (req, res, next) => {
     let deptName = req.body.departmentName;
@@ -37,7 +37,20 @@ let checkDeptExists = async (req, res, next) => {
         //console.log('sending error');
         res.status(500).json({error: 'Department with this name already exists'});
     }
-};
+}
+
+let checkPosExists = async (req, res, next) => {
+    let deptId = req.body.departmentId;
+    let positionName = req.body.positionName;
+    let positionExists = await position.exists(deptId, positionName);
+    //console.log('response = ',response);
+    if (!positionExists) {
+        next();
+    } else {
+        //console.log('sending error');
+        res.status(500).json({error: 'Position with this name already exists in such department'});
+    }
+}
 
 // functions which will be used in the api calls
 let checkUserHasRole = async (req, res, next) => {
@@ -250,6 +263,25 @@ apiRoutes.get('/positions/getAll', isAuthenticated, async (req, res) => {
     }
     catch(error) {
         res.status(500).json({error: error});
+    }
+});
+
+apiRoutes.post('/position/create', isAuthenticated, checkPosExists, async (req, res) => {
+    try {
+        let deptId = req.body.departmentId;
+        let positionName = req.body.positionName;
+        let creator = req.user.user_id;
+        let result = await position.create(positionName, deptId, creator);
+        if (result === 1) {
+            let newPos = await position.getAllDetailsByPositionName(positionName, deptId);
+            res.status(200).json({message: 'Position created successfully', data: newPos[0][0]});
+        } else {
+            res.status(500).json({error: 'Position could not be saved to the DB'});
+        }
+    }
+    catch(error) {
+        console.log('server error: ', error);
+        res.status(500).json({error: error.toString()})
     }
 });
 
