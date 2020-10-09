@@ -2,6 +2,7 @@ import Head from 'next/head';
 import Layout from '../../components/Layout';
 import axios from 'axios';
 import Table from '../../components/Table';
+import LookupEmployee from '../../components/LookupEmployee';
 
 const Employees = () => {
     const [employees, setEmployees] = React.useState({});
@@ -47,6 +48,7 @@ const Employees = () => {
             <div>
                 <p>All Employess</p>
             </div>
+            <LookupEmployee></LookupEmployee>
             {employees.length > 0 ? <Table labels={labels} tableData={employees}/> : <p>Please wait</p>}
         </Layout>
 
