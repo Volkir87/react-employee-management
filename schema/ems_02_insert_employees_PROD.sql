@@ -1,4 +1,4 @@
-use rems_db;
+use ebdb;
 
 insert into `user_status` (status, description) values
 ('Active', 'Active user'),

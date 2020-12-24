@@ -2,8 +2,15 @@
 const mysql = require("mysql2/promise");
 
 let connection;
-if (process.env.JAWSDB_URL) {
-	connection = mysql.createPool(process.env.JAWSDB_URL);
+if (process.env.RDS_HOSTNAME) {
+	connection = mysql.createPool({
+		host: process.env.RDS_HOSTNAME,
+		port: process.env.RDS_PORT,
+		user: process.env.RDS_USERNAME,
+		password: process.env.RDS_PASSWORD,
+		database: process.env.RDS_DB_NAME,
+		connectionLimit: 100
+	});
 } else {      
 	connection = mysql.createPool({
 		host: "localhost",
