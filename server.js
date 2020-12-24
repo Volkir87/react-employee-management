@@ -1,6 +1,6 @@
 const express = require('express');
 const next = require('next');
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 const session = require('express-session');
 const passport = require('passport');
 const bodyParser = require("body-parser");
