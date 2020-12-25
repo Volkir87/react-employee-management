@@ -194,7 +194,7 @@ apiRoutes.post('/login', authenticate, (req, res) => {
 
 apiRoutes.get('/logout', function(req, res){
     req.logout();
-    res.redirect('/login');
+    res.status(200).send('Success');
 });
 
 // Employee routes

@@ -98,7 +98,3 @@ ALTER TABLE `user_role` ADD FOREIGN KEY (`role_id`) REFERENCES `role` (`id`);
 ALTER TABLE `user_role` ADD FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
 
 ALTER TABLE `user` ADD FOREIGN KEY (`status_id`) REFERENCES `user_status` (`id`);
-
-ALTER TABLE `employee` ADD FOREIGN KEY (`status_id`) REFERENCES `employee_status` (`id`);
-
-ALTER TABLE `employee` ADD FOREIGN KEY (`employment_type_id`) REFERENCES `employment_type` (`id`);

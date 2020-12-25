@@ -4,6 +4,7 @@ import axios from 'axios';
 import Table from '../../../components/Table';
 import CreateUser from '../../../components/CreateUser';
 import createTypography from '@material-ui/core/styles/createTypography';
+import Typography from '@material-ui/core/Typography';
 
 const Users = () => {
     const [users, setUsers] = React.useState({});
@@ -49,9 +50,7 @@ const Users = () => {
             <title>User maintenance</title>
         </Head>
         <Layout>
-            <div>
-                <p>This is the users maintenance page</p>
-            </div>
+            <Typography variant="h5">This is the user roles maintenance page</Typography>
             <CreateUser updateUser={updateUserInfo}/>
             <div>
                 <p>All users</p>

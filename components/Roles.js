@@ -3,9 +3,20 @@ import Layout from './Layout';
 import axios from 'axios';
 import Table from './Table';
 import AssignUserRole from './AssignUserRole';
+import Typography from '@material-ui/core/Typography';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
+
+const useStyles = makeStyles((theme) => ({
+    header: {
+        marginTop: '1rem',
+        marginBottom: '1rem'
+    },
+}));
 
 const Roles = () => {
     const [userRoles, setuserRoles] = React.useState({});
+
+    const classes = useStyles();
 
     const labels = {
         user_id: 'User ID',
@@ -58,13 +69,9 @@ const Roles = () => {
 
     return (
         <div>
-            <div>
-                <p>This is the user roles maintenance page</p>
-            </div>
+            <Typography variant="h6" className={classes.header}>Role User Management</Typography>
             <AssignUserRole update={updateUserInfo}/>
-            <div>
-                <p>All users and their roles</p>
-            </div>
+            <Typography variant="subtitle1" className={classes.header}>All User Roles</Typography>
             {userRoles.length > 0 ? <Table labels={labels} tableData={userRoles}/> : <p>Please wait</p>}
         </div>
     )};

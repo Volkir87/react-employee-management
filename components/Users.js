@@ -3,9 +3,20 @@ import Layout from './Layout';
 import axios from 'axios';
 import Table from './Table';
 import CreateUser from './CreateUser';
+import Typography from '@material-ui/core/Typography';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
+
+const useStyles = makeStyles((theme) => ({
+    header: {
+        marginTop: '1rem',
+        marginBottom: '1rem'
+    },
+}));
 
 const Users = () => {
     const [users, setUsers] = React.useState({});
+
+    const classes = useStyles();
 
     const labels = {
         user_id: 'User ID',
@@ -44,13 +55,9 @@ const Users = () => {
 
     return (
         <div>
-            <div>
-                <p>This is the users maintenance page</p>
-            </div>
+            <Typography variant="h6" className={classes.header}>User Management</Typography>
             <CreateUser updateUser={updateUserInfo}/>
-            <div>
-                <p>All users</p>
-            </div>
+            <Typography variant="subtitle1" className={classes.header}>All Users</Typography>
             {users.length > 0 ? <Table labels={labels} tableData={users}/> : <p>Please wait</p>}
         </div>
     )};
