@@ -3,6 +3,7 @@ import Layout from '../../../components/Layout';
 import axios from 'axios';
 import Table from '../../../components/Table';
 import AssignUserRole from '../../../components/AssignUserRole';
+import Typography from '@material-ui/core/Typography';
 
 const Roles = () => {
     const [userRoles, setuserRoles] = React.useState({});
@@ -62,9 +63,7 @@ const Roles = () => {
             <title>Role maintenance</title>
         </Head>
         <Layout>
-            <div>
-                <p>This is the user roles maintenance page</p>
-            </div>
+            <Typography variant="h2">This is the user roles maintenance page</Typography>
             <AssignUserRole update={updateUserInfo}/>
             <div>
                 <p>All users and their roles</p>

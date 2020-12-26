@@ -4,6 +4,10 @@ import Typography from '@material-ui/core/Typography';
 import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
 import Toolbar from '@material-ui/core/Toolbar';
 import axios from 'axios';
+import Button from '@material-ui/core/Button';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
+import Router from 'next/router';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -20,6 +24,32 @@ const useStyles = makeStyles((theme) => ({
 
 const ApplicationBar = () => {
     const [user, setUser] = React.useState({});
+    const [anchorEl, setAnchorEl] = React.useState(null);
+
+    const followLink = (link) => {
+        Router.push(link);
+    }
+
+    const handleClick = (event) => {
+        console.log("user ", user);
+        if (user.data.user) {
+            setAnchorEl(event.currentTarget);
+        }
+    };
+  
+    const handleClose = () => {
+      setAnchorEl(null);
+    };
+
+    const handleLogout = () => {
+        axios({
+            method: 'get',
+            url: '/api/logout',
+            withCredentials: true
+        })
+        .then(followLink('/login'));
+        handleClose();
+      };
 
     const getUser = () => {
         axios({
@@ -50,9 +80,19 @@ const ApplicationBar = () => {
                 <Typography variant="h6" className={classes.title}>
                     Employee Management System
                 </Typography>
-                <Typography variant="subtitle2">
-                    {(user.data) ? user.data.user : '-'}
-                </Typography>
+                <Button aria-controls="simple-menu" aria-haspopup="true" variant="contained" color="primary" onClick={handleClick}>
+                    {(user.data) ? ((user.data.user) ? user.data.user : '-') : '-' }
+                </Button>
+                <Menu
+                    id="simple-menu"
+                    anchorEl={anchorEl}
+                    keepMounted
+                    open={Boolean(anchorEl)}
+                    onClose={handleClose}
+                >
+                    <MenuItem onClick={handleClose}>Profile</MenuItem>
+                    <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                </Menu>
             </Toolbar>
         </AppBar>
         {/* second Toolbar is to shift content down (this is advised by Material-UI) */}
