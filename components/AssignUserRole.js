@@ -18,6 +18,7 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import axios from 'axios';
+import Autocomplete from '@material-ui/lab/Autocomplete';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -39,7 +40,8 @@ const useStyles = makeStyles((theme) => ({
       alignItems: 'center',
     },
     column: {
-      flexBasis: '100%',
+      display: 'flex',
+      flexDirection: ''
     },
     helper: {
       borderLeft: `2px solid ${theme.palette.divider}`,
@@ -59,46 +61,34 @@ const useStyles = makeStyles((theme) => ({
     formControl: {
         margin: theme.spacing(1),
         minWidth: 120,
+        width: 200,
       },
       selectEmpty: {
         marginTop: theme.spacing(2),
       },
   }));
 
-const AssignUserRole = ({update}) => {
+const AssignUserRole = ({update, allUsers, allRoles}) => {
     const classes = useStyles();
 
     const [message, setMessage] = React.useState({open: false, text: ''});
     const [user, setUser] = React.useState('');
     const [role, setRole] = React.useState('');
-    const [allUsers, setAllUsers] = React.useState([]);
-    const [allRoles, setAllRoles] = React.useState([]);
+    const [userList, setAllUsers] = React.useState([]);
+    const [roleList, setAllRoles] = React.useState([]);
 
-    // using this hook to load all users and all roles to display them on the list
+    // using these hooks to watch for all users and all roles to display them on the list
     React.useEffect(() => {
-        axios({
-            method: 'get',
-            url: '/api/user/getUserList',
-            withCredentials: true
-        })
-        .then((result) => {
-            setAllUsers(result.data);
-        })
-        .catch((error) => {
-            setMessage({open: true, text: error.response.data.error});
-        });
-        axios({
-            method: 'get',
-            url: '/api/user/getRoleList',
-            withCredentials: true
-        })
-        .then((result) => {
-            setAllRoles(result.data);
-        })
-        .catch((error) => {
-            setMessage({open: true, text: error.response.data.error});
-        });
-    }, [])
+        if (allUsers) {
+            setAllUsers(allUsers);
+        }
+    }, [allUsers])
+
+    React.useEffect(() => {
+        if (allRoles) {
+            setAllRoles(allRoles);
+        }
+    }, [allRoles])
 
     //function to clear all elements
     let clearValues = (elements) => {
@@ -121,6 +111,8 @@ const AssignUserRole = ({update}) => {
             setMessage({open: true, text: 'Both User ID and Role are required'});
             return;
         }
+        console.log("user: ", user);
+        console.log("role: ", role);
         axios({
             method: 'post',
             url: '/api/user/assignRole',
@@ -133,7 +125,7 @@ const AssignUserRole = ({update}) => {
         .then((response) => {
             if (response.status === 200) {
                 setMessage({open: true, text: 'Role assigned to a User successfully'});
-                clearValues(['userId', 'roleId']);
+                clearValues(['roleId']);
                 setUser('');
                 setRole('');
                 console.log('response data data: ', response.data.data);
@@ -148,8 +140,14 @@ const AssignUserRole = ({update}) => {
         });
     }
 
-    const handleUserSelection = (event) => {
-        setUser(event.target.value);
+    const handleUserSelection = (event, value) => {
+        console.log("value: ", value);
+        if (value) {
+            setUser(value.id);
+        } else {
+            setUser('');
+        }
+        console.log("selected user: ", user);
     }
 
     const handleRoleSelection = (event) => {
@@ -157,7 +155,7 @@ const AssignUserRole = ({update}) => {
     }
     
     const cancelAssignment = () => {
-        clearValues(['userId', 'roleId']);
+        clearValues(['roleId']);
         setUser('');
         setRole('');
     }
@@ -176,7 +174,7 @@ const AssignUserRole = ({update}) => {
             </ExpansionPanelSummary>
             <ExpansionPanelDetails className={classes.details}>
                 <div className={classes.column}>
-                    <FormControl className={classes.formControl}>
+                    {/* <FormControl className={classes.formControl}>
                         <InputLabel id="userIdLabel">User</InputLabel>
                         <Select
                         labelId="userIdLabel"
@@ -184,11 +182,20 @@ const AssignUserRole = ({update}) => {
                         value={user}
                         onChange={handleUserSelection}
                         >
-                        {(allUsers.length > 0) ? allUsers.map((v) => {
+                        {(userList.length > 0) ? userList.map((v) => {
                             return <MenuItem key={v.id} value={v.id}>{v.user_id}</MenuItem>
                         }) : <p>Please wait...</p>}
                         </Select>
-                    </FormControl>
+                    </FormControl> */}
+                    <Autocomplete 
+                        className={classes.formControl}
+                        id="combo-box-user"
+                        options={userList}
+                        getOptionLabel={(userList) => userList.user_id}
+                        style={{ width: 200 }}
+                        renderInput={(params) => <TextField {...params} label="User" />}
+                        onChange={handleUserSelection}
+                    />
                     <FormControl className={classes.formControl}>
                         <InputLabel id="roleIdLabel">Role</InputLabel>
                         <Select
@@ -197,7 +204,7 @@ const AssignUserRole = ({update}) => {
                         value={role}
                         onChange={handleRoleSelection}
                         >
-                        {(allRoles.length > 0) ? allRoles.map((v) => {
+                        {(roleList.length > 0) ? roleList.map((v) => {
                             return <MenuItem key={v.id} value={v.id}>{v.name}</MenuItem>
                         }) : <p>Please wait...</p>}
                         </Select>
