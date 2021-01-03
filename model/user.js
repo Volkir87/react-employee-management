@@ -14,7 +14,7 @@ class User {
     };
 
     async getById(id){
-        let query = `select user_id, first_name, last_name, status_id, created_date
+        let query = `select id, user_id, first_name, last_name, status_id, created_date
         from user
         where id = ?;`;
         try {

@@ -5,6 +5,7 @@ import Roles from '../../../components/Roles';
 import Paper from '@material-ui/core/Paper';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
+import Router from 'next/router';
 import axios from 'axios';
 
 
@@ -34,6 +35,10 @@ const AdminMain = () => {
     const handleTabChange = (event, newValue) => {
       setValue(newValue);
     };
+
+    const followLink = (link) => {
+        Router.push(link);
+    }
 
     const getUserInfo = () => {
         axios({
@@ -81,7 +86,7 @@ const AdminMain = () => {
             setAllUsers(result.data);
         })
         .catch((error) => {
-            setMessage({open: true, text: error.response.data.error});
+            console.log(error);
         });
     }
 
@@ -95,7 +100,26 @@ const AdminMain = () => {
             setAllRoles(result.data);
         })
         .catch((error) => {
-            setMessage({open: true, text: error.response.data.error});
+            console.log(error);
+        });
+    }
+
+    const checkAdmin = () => {
+        axios({
+            method: 'get',
+            url: '/api/user/checkAdmin',
+            withCredentials: true,
+            data: {
+                roleId: 1
+            },
+        })
+        .then((result) => {
+            if (result.data.isAdmin == 0) {
+                followLink('/accessError')
+            };
+        })
+        .catch((error) => {
+            console.log(error);
         });
     }
 
@@ -116,6 +140,7 @@ const AdminMain = () => {
 
     // using useEffect hook to get all the users once the page is loaded (we don't need this info any time before that)
     React.useEffect(() => {
+        checkAdmin();
         getUserInfo();
         getUserRoleInfo();
         getUserList();
