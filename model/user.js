@@ -29,7 +29,8 @@ class User {
     async getAll(){
         let query = `select u.user_id, u.first_name, u.last_name, ut.status, u.created_date, u.created_by
         from user u
-        left outer join user_status ut on u.status_id = ut.id;`;
+        left outer join user_status ut on u.status_id = ut.id
+        order by u.user_id;`;
         try {
 			let result = await this.connection.query(query);
 			return result;
@@ -145,7 +146,8 @@ class User {
         let query = `select u.user_id, u.first_name, u.last_name, ut.status, u.created_date, u.created_by
         from user u
         left outer join user_status ut on u.status_id = ut.id
-        where u.user_id = ?;`;
+        where u.user_id = ?
+        order by u.user_id;`;
         try {
 			let result = await this.connection.query(query, [userId]);
 			return result;

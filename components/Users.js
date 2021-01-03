@@ -13,8 +13,15 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const Users = () => {
-    const [users, setUsers] = React.useState({});
+const Users = (props) => {
+
+    const [allUsers, setAllUsers] = React.useState([]);
+
+    React.useEffect(() => {
+        if (props.users) {
+            setAllUsers(props.users);
+        }
+    },[props.users]);
 
     const classes = useStyles();
 
@@ -28,37 +35,12 @@ const Users = () => {
         created_by: 'Created By'
     }
 
-    const getUserInfo = () => {
-        axios({
-            method: 'get',
-            url: '/api/user/getAll',
-            withCredentials: true
-        })
-        .then((response) => {
-            console.log('calling API');
-            setUsers(response.data);
-        })
-        .catch((error) => {
-            console.log(error);
-        })
-    }
-
-    const updateUserInfo = (newUser) => {
-        let newArray = [...users, newUser];
-        setUsers(newArray);
-    }
-
-    // using useEffect hook to get all the users once the page is loaded (we don't need this info any time before that)
-    React.useEffect(() => {
-        getUserInfo();
-    }, []);
-
     return (
         <div>
             <Typography variant="h6" className={classes.header}>User Management</Typography>
-            <CreateUser updateUser={updateUserInfo}/>
+            <CreateUser updateUser={props.updateUserInfo}/>
             <Typography variant="subtitle1" className={classes.header}>All Users</Typography>
-            {users.length > 0 ? <Table labels={labels} tableData={users}/> : <p>Please wait</p>}
+            {allUsers ? <Table labels={labels} tableData={allUsers}/> : <p>Please wait</p>}
         </div>
     )};
 
