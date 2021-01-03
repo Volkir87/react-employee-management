@@ -44,7 +44,7 @@ const Roles = (props) => {
             <Typography variant="h6" className={classes.header}>Role User Management</Typography>
             <AssignUserRole update={props.updateUserRoleInfo} allUsers={props.allUsers} allRoles={props.allRoles}/>
             <Typography variant="subtitle1" className={classes.header}>All User Roles</Typography>
-            {allUserRoles ? <Table labels={labels} tableData={props.userRoles}/> : <p>Please wait</p>}
+            {allUserRoles ? <Table labels={labels} tableData={allUserRoles}/> : <p>Please wait</p>}
         </div>
     )};
 

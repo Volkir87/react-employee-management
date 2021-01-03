@@ -16,7 +16,8 @@ import PersonIcon from '@material-ui/icons/Person';
 import WorkIcon from '@material-ui/icons/Work';
 import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
 import SettingsIcon from '@material-ui/icons/Settings';
-import Router from 'next/router'
+import Router from 'next/router';
+import axios from 'axios';
 
 const drawerWidth = 240;
 
@@ -71,6 +72,7 @@ const Layout = ({children}) => {
     const classes = useStyles();
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
+    const [isAdmin, setIsAdmin] = React.useState(false);
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -88,6 +90,29 @@ const Layout = ({children}) => {
     const followLink = (link) => {
         Router.push(link);
     }
+
+    const checkAdmin = () => {
+        axios({
+            method: 'get',
+            url: '/api/user/checkAdmin',
+            withCredentials: true,
+            data: {
+                roleId: 1
+            },
+        })
+        .then((result) => {
+            if (result.data.isAdmin == 1) {
+                setIsAdmin(true);
+            };
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+    }
+
+    React.useEffect(() => {
+        checkAdmin();
+    }, [])
 
     return (
         <div>
@@ -128,12 +153,13 @@ const Layout = ({children}) => {
                         </ListItem>
                     </List>
                     <Divider/>
+                    { isAdmin ? 
                     <List>
                         <ListItem button key='Admin' onClick={() => {followLink('/secured/admin/main')}}>
                             <ListItemIcon><SettingsIcon/></ListItemIcon>
                             <ListItemText primary='Admin'/>
                         </ListItem>
-                    </List>
+                    </List> : <span/>}
                 </Drawer>
                 <main className={classes.content}>
                     {/* <div className={classes.toolbar} /> */}

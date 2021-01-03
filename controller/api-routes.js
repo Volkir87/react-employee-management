@@ -184,6 +184,27 @@ apiRoutes.get('/user/getRoleList', isAuthenticated, async (req, res) => {
     }
 });
 
+
+apiRoutes.get('/user/checkAdmin', isAuthenticated, async (req, res) => {
+    try {
+        let userId = req.user.id;
+        let roleId = 1;
+        console.log('userId: ', userId);
+        console.log('roleId: ', roleId);
+        let userIsAdmin = await user.hasRole(userId, roleId);
+        console.log('userIsAdmin = ', userIsAdmin);
+        if (userIsAdmin) {
+            res.status(200).json({isAdmin: 1});
+        } else {
+            //console.log('sending error');
+            res.status(200).json({isAdmin: 0});
+        }
+    }
+    catch(error) {
+        res.status(500).json({error: error});
+    }
+});
+
 // apiRoutes.post('/login', passport.authenticate("local", {failureMessage: 'Incorrect user name or password'}), (req, res) => {
 //     res.status(200).send('Success');
 // });
