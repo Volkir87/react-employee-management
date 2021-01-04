@@ -59,6 +59,7 @@ const AdminMain = () => {
         let newArray = [...users, newUser];
         setUsers(newArray);
         getUserList();
+        getUserRoleInfo();
     }
 
     const getUserRoleInfo = () => {
