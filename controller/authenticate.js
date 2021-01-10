@@ -3,7 +3,7 @@
 const passport = require('../config/authConfigLocal');
 
 module.exports = (req, res, next) => {
-    console.log('called authenticate');
+    //console.log('called authenticate');
     passport.authenticate("local", (err, user, info) => {
         if (err) {return next(err)}
         if (!user) {

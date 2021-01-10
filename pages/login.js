@@ -76,7 +76,7 @@ const Login = () => {
         .then((response) => {
             console.log(response.status);
             if (response.status === 200) {
-                Router.push('/secured/dashboard');
+                Router.push('/secured/employees');
             } else {
                 setMessage({open: true, text: 'Unknown server response'});
             }

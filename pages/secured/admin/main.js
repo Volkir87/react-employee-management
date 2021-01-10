@@ -26,7 +26,7 @@ const TabPanel = (props) => {
 }
 
 const AdminMain = () => {
-    const [value, setValue] = React.useState(1);
+    const [value, setValue] = React.useState(0);
     const [users, setUsers] = React.useState({});
     const [userRoles, setUserRoles] = React.useState({});
     const [allUsers, setAllUsers] = React.useState([]);

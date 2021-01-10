@@ -174,19 +174,6 @@ const AssignUserRole = ({update, allUsers, allRoles}) => {
             </ExpansionPanelSummary>
             <ExpansionPanelDetails className={classes.details}>
                 <div className={classes.column}>
-                    {/* <FormControl className={classes.formControl}>
-                        <InputLabel id="userIdLabel">User</InputLabel>
-                        <Select
-                        labelId="userIdLabel"
-                        id="userId"
-                        value={user}
-                        onChange={handleUserSelection}
-                        >
-                        {(userList.length > 0) ? userList.map((v) => {
-                            return <MenuItem key={v.id} value={v.id}>{v.user_id}</MenuItem>
-                        }) : <p>Please wait...</p>}
-                        </Select>
-                    </FormControl> */}
                     <Autocomplete 
                         className={classes.formControl}
                         id="combo-box-user"
