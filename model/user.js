@@ -27,7 +27,7 @@ class User {
     };
 
     async getAll(){
-        let query = `select u.user_id, u.first_name, u.last_name, ut.status, u.created_date, u.created_by
+        let query = `select u.user_id, u.first_name, u.last_name, ut.status, date_format(u.created_date,"%Y-%m-%d %T") as 'created_date', u.created_by
         from user u
         left outer join user_status ut on u.status_id = ut.id
         order by u.user_id;`;
@@ -47,7 +47,7 @@ class User {
         case when r.description is NULL then 'No role' 
         else r.description end role_description,
         case when ur.assigned_date is NULL then 'N/A' 
-        else ur.assigned_date end assigned_date,
+        else date_format(ur.assigned_date,"%Y-%m-%d %T") end assigned_date, 
         case when ur.assigned_by is NULL then 'N/A' 
         else ur.assigned_by end assigned_by
         from user u

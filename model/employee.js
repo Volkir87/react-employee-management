@@ -42,7 +42,7 @@ class Employee {
             `select e1.first_name, e1.last_name, p.title, d.name, 
             case when e1.manager_id is not null then concat(e2.first_name, ' ', e2.last_name)
             else 'No manager' end as 'manager',
-			e1.start_date
+			date_format(e1.start_date,"%Y-%m-%d %T") as 'start_date'
             from employee e1
             left outer join employee e2 on e1.manager_id = e2.id
             left outer join position p on p.id = e1.position_id
@@ -75,12 +75,32 @@ class Employee {
         }
     }
 
-    async addEmployee(firstName, lastName, roleId, managerId, startDate) {
-        let query = `insert into employee (first_name, last_name, role_id, manager_id, start_date) 
+    async addEmployee(firstName, lastName, managerId, positionId, startDate) {
+        let query = `insert into employee (first_name, last_name, manager_id, position_id, start_date) 
             values (?, ?, ?, ?, ?);`;
         try {
-            await this.connection.query(query, [firstName, lastName, roleId, managerId, startDate]);
+            await this.connection.query(query, [firstName, lastName, managerId, positionId, startDate]);
             return 1;
+        }
+        catch(error){
+            throw error;
+        }
+    }
+
+    async getEmployeeDetails(firstName, lastName, managerId, positionId){ 
+        let query = 
+            `select e1.first_name, e1.last_name, p.title, d.name, 
+            case when e1.manager_id is not null then concat(e2.first_name, ' ', e2.last_name)
+            else 'No manager' end as 'manager',
+			date_format(e1.start_date,"%Y-%m-%d %T") as 'start_date'
+            from employee e1
+            left outer join employee e2 on e1.manager_id = e2.id
+            left outer join position p on p.id = e1.position_id
+            left outer join department d on p.department_id = d.id
+            where e1.first_name = ? and e1.last_name = ? and e1.manager_id = ? and e1.position_id = ?;`;
+        try {
+            let result = await this.connection.query(query, [firstName, lastName, managerId, positionId]);
+            return result;
         }
         catch(error){
             throw error;

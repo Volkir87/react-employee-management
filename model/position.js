@@ -36,7 +36,23 @@ class Position {
 			return result;
 		}
 		catch(error){
-            console.log(error);
+            //console.log(error);
+			throw error;
+		}
+    };
+
+    async getDepartmentsPositions(){
+        let query = `
+        select p.id as 'position_id', p.title, d.id as 'department_id', d.name as 'department_name'
+        from position p
+        left join department d on p.department_id = d.id;
+        `;
+        try {
+			let result = await this.connection.query(query);
+			return result;
+		}
+		catch(error){
+            //console.log(error);
 			throw error;
 		}
     };

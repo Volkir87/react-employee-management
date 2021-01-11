@@ -231,6 +231,35 @@ apiRoutes.get('/employees/getAll', isAuthenticated, async (req, res) => {
     }
 });
 
+apiRoutes.get('/employees/getList', isAuthenticated, async (req, res) => {
+    try {
+        let dbCallResult = await employee.getEmployeeList();
+        let allEmployees = dbCallResult[0];
+        res.status(200).json(allEmployees);
+    }
+    catch(error) {
+        res.status(500).json({error: error});
+    }
+});
+
+apiRoutes.post('/employees/create', isAuthenticated, async (req, res) => {
+    try {
+        let {firstName, lastName, managerId, positionId, startDate} = req.body;
+        let dbCallResult = await employee.addEmployee(firstName, lastName, managerId, positionId, startDate);
+        if (dbCallResult === 1) {
+            //console.log('sending success response');
+            let newUser = await employee.getEmployeeDetails(firstName, lastName, managerId, positionId);
+            res.status(200).json({message: 'Employee created successfully', data: newUser[0][0]});
+        } else {
+            res.status(500).json({error: 'User could not be saved to the DB'});
+        }
+    }
+    catch(error) {
+        //console.log('server error: ', error);
+        res.status(500).json({error: error.toString()})
+    }
+});
+
 
 // Department routes
 
@@ -279,6 +308,17 @@ apiRoutes.post('/department/create', isAuthenticated, checkDeptExists, async (re
 apiRoutes.get('/positions/getAll', isAuthenticated, async (req, res) => {
     try {
         let dbCallResult = await position.getAll();
+        let allPositions = dbCallResult[0];
+        res.status(200).json(allPositions);
+    }
+    catch(error) {
+        res.status(500).json({error: error});
+    }
+});
+
+apiRoutes.get('/positions/getDepartmentPositions', isAuthenticated, async (req, res) => {
+    try {
+        let dbCallResult = await position.getDepartmentsPositions();
         let allPositions = dbCallResult[0];
         res.status(200).json(allPositions);
     }
